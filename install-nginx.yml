@@ -6,6 +6,11 @@
         name: nginx
         state: present
 
+    - name: "Install Certbot"
+      apt:
+        name: certbot
+        state: present
+
     - name: "Start Nginx Services"
       service:
         name: nginx
@@ -25,3 +30,13 @@
         group: www-data
         mode: 0755
         recurse: yes
+
+    - name: "Run Certbot for SSL"
+      command: "certbot --nginx --non-interactive --agree-tos --email samadkhansk5567@gmail.com -d 35.200.200.65"
+      become: true
+      ignore_errors: yes  # Ignore errors in case the SSL certificate is already installed
+
+    - name: "Reload Nginx after Certbot"
+      service:
+        name: nginx
+        state: reloaded
