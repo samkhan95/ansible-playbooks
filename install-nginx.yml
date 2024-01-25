@@ -32,7 +32,7 @@
         recurse: yes
 
     - name: "Run Certbot for SSL"
-      command: "certbot --nginx --non-interactive --agree-tos --email samadkhansk5567@gmail.com -d 35.200.200.65"
+      command: "certbot --nginx --non-interactive --agree-tos --email samadkhansk5567@gmail.com -d 	awx-test.bootcamp64.tk"
       become: true
       ignore_errors: yes  # Ignore errors in case the SSL certificate is already installed
 
