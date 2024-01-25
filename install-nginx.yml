@@ -1,5 +1,7 @@
 ---
 - hosts: WebServer
+  vars:
+    ansible_ssh_private_key_file: "{{ credential('samad-gcp').credential }}"
   tasks:
     - name: "Install NginX"
       apt:
