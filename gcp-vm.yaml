@@ -1,18 +1,18 @@
 ---
 - name: Create instance in GCP
-  hosts: all
+  hosts: localhost
   gather_facts: false
   tasks:
-    - name: Install python3-pip
-      apt:
-        name: python3-pip
-        state: present
-        update_cache: yes
+    # - name: Install python3-pip
+    #   apt:
+    #     name: python3-pip
+    #     state: present
+    #     update_cache: yes
 
-    - name: Ensure google-auth is installed via apt
-      apt:
-        name: python3-google-auth
-        state: present
+    # - name: Ensure google-auth is installed via apt
+    #   apt:
+    #     name: python3-google-auth
+    #     state: present
       
     - name: Create a disk
       google.cloud.gcp_compute_disk:
@@ -22,7 +22,7 @@
         zone: "{{ zone }}"
         project: "{{ project }}"
         auth_kind: serviceaccount
-        service_account_contents: "{{ service_account_file }}"
+        service_account_file: "{{ service_account_file }}"
         state: present
       register: disk
 
