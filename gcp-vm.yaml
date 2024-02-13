@@ -13,18 +13,24 @@
       apt:
         name: python3-google-auth
         state: present
-
+      
     - name: Create a disk
       google.cloud.gcp_compute_disk:
         name: "{{ disk_name }}"
         size_gb: "{{ disk_size }}"
         source_image: "{{ source_image }}"
         zone: "{{ zone }}"
+        project: "{{ project }}"
+        auth_kind: serviceaccount
+        service_account_contents: "{{ service_account_file }}"
         state: present
       register: disk
 
     - name: Create a Network in GCP
       google.cloud.gcp_compute_network:
+        auth_kind: serviceaccount
+        project: "{{ project }}"
+        service_account_file: "{{ service_account_file }}"
         name: "{{ network_name }}"
         auto_create_subnetworks: false
         state: present
@@ -32,6 +38,9 @@
 
     - name: Create a Subnet in the Network
       google.cloud.gcp_compute_subnetwork:
+        auth_kind: serviceaccount
+        project: "{{ project }}"
+        service_account_file: "{{ service_account_file }}"
         name: "{{ subnet_name }}"
         region: "{{ region }}"
         ip_cidr_range: "{{ subnet_cidr }}"
@@ -41,6 +50,9 @@
 
     - name: Reserve a static IP Address
       google.cloud.gcp_compute_address:
+        auth_kind: serviceaccount
+        project: "{{ project }}"
+        service_account_file: "{{ service_account_file }}"
         name: "{{ ip_name }}"
         region: "{{ region }}"
         state: present
@@ -48,6 +60,9 @@
 
     - name: Create an Instance
       google.cloud.gcp_compute_instance:
+        auth_kind: serviceaccount
+        project: "{{ project }}"
+        service_account_file: "{{ service_account_file }}"
         state: present
         name: "{{ machine_name }}"
         machine_type: "{{ machine_type }}"
