@@ -3,6 +3,10 @@
   hosts: all
   gather_facts: false
   tasks:
+  - name: Retrieve service account file from AWX credential
+    set_fact:
+      service_account_file: "{{ lookup('tower_credential', service_account_credential) }}"
+      
     - name: Create a disk
       google.cloud.gcp_compute_disk:
         name: "{{ disk_name }}"
