@@ -3,9 +3,6 @@
   hosts: all
   gather_facts: false
   tasks:
-    - name: Retrieve service account file from AWX credential
-      set_fact:
-        service_account_file: "{{ lookup('tower_credential', service_account_credential) }}"
       
     - name: Create a disk
       google.cloud.gcp_compute_disk:
@@ -15,7 +12,7 @@
         zone: "{{ zone }}"
         project: "{{ project }}"
         auth_kind: serviceaccount
-        service_account_file: "{{ lookup('file', '/var/lib/awx/.awxenv') }}"
+        service_account_file: "{{ service_account_file }}"
         state: present
       register: disk
 
@@ -23,7 +20,7 @@
       google.cloud.gcp_compute_network:
         auth_kind: serviceaccount
         project: "{{ project }}"
-        service_account_file: "{{ lookup('file', '/var/lib/awx/.awxenv') }}"
+        service_account_file: "{{ service_account_file }}"
         name: "{{ network_name }}"
         auto_create_subnetworks: false
         state: present
@@ -33,7 +30,7 @@
       google.cloud.gcp_compute_subnetwork:
         auth_kind: serviceaccount
         project: "{{ project }}"
-        service_account_file: "{{ lookup('file', '/var/lib/awx/.awxenv') }}"
+        service_account_file: "{{ service_account_file }}"
         name: "{{ subnet_name }}"
         region: "{{ region }}"
         ip_cidr_range: "{{ subnet_cidr }}"
@@ -45,7 +42,7 @@
       google.cloud.gcp_compute_address:
         auth_kind: serviceaccount
         project: "{{ project }}"
-        service_account_file: "{{ lookup('file', '/var/lib/awx/.awxenv') }}"
+        service_account_file: "{{ service_account_file }}"
         name: "{{ ip_name }}"
         region: "{{ region }}"
         state: present
@@ -55,7 +52,7 @@
       google.cloud.gcp_compute_instance:
         auth_kind: serviceaccount
         project: "{{ project }}"
-        service_account_file: "{{ lookup('file', '/var/lib/awx/.awxenv') }}"
+        service_account_file: "{{ service_account_file }}"
         state: present
         name: "{{ machine_name }}"
         machine_type: "{{ machine_type }}"
