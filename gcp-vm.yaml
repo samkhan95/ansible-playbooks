@@ -1,0 +1,69 @@
+---
+- name: Create instance in GCP
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Create a disk
+      google.cloud.gcp_compute_disk:
+        name: "{{ disk_name }}"
+        size_gb: "{{ disk_size }}"
+        source_image: "{{ source_image }}"
+        zone: "{{ zone }}"
+        project: "{{ project }}"
+        auth_kind: serviceaccount
+        service_account_file: "{{ lookup('file', '/var/lib/awx/.awxenv') }}"
+        state: present
+      register: disk
+
+    - name: Create a Network in GCP
+      google.cloud.gcp_compute_network:
+        auth_kind: serviceaccount
+        project: "{{ project }}"
+        service_account_file: "{{ lookup('file', '/var/lib/awx/.awxenv') }}"
+        name: "{{ network_name }}"
+        auto_create_subnetworks: false
+        state: present
+      register: network
+
+    - name: Create a Subnet in the Network
+      google.cloud.gcp_compute_subnetwork:
+        auth_kind: serviceaccount
+        project: "{{ project }}"
+        service_account_file: "{{ lookup('file', '/var/lib/awx/.awxenv') }}"
+        name: "{{ subnet_name }}"
+        region: "{{ region }}"
+        ip_cidr_range: "{{ subnet_cidr }}"
+        network: "{{ network }}"
+        state: present
+      register: subnet
+
+    - name: Reserve a static IP Address
+      google.cloud.gcp_compute_address:
+        auth_kind: serviceaccount
+        project: "{{ project }}"
+        service_account_file: "{{ lookup('file', '/var/lib/awx/.awxenv') }}"
+        name: "{{ ip_name }}"
+        region: "{{ region }}"
+        state: present
+      register: address
+
+    - name: Create an Instance
+      google.cloud.gcp_compute_instance:
+        auth_kind: serviceaccount
+        project: "{{ project }}"
+        service_account_file: "{{ lookup('file', '/var/lib/awx/.awxenv') }}"
+        state: present
+        name: "{{ machine_name }}"
+        machine_type: "{{ machine_type }}"
+        zone: "{{ zone }}"
+        disks:
+          - auto_delete: true
+            boot: true
+            source: "{{ disk }}"
+        network_interfaces:
+          - network: "{{ network }}"
+            subnetwork: "{{ subnet }}"
+            access_configs:
+              - name: External NAT
+                type: ONE_TO_ONE_NAT
+                nat_ip: "{{ address }}"
