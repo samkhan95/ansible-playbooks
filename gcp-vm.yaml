@@ -3,6 +3,11 @@
   hosts: all
   gather_facts: false
   tasks:
+
+    - name: Ensure google-auth is installed
+      pip:
+        name: google-auth
+        state: present
       
     - name: Create a disk
       google.cloud.gcp_compute_disk:
