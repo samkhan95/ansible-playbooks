@@ -28,8 +28,8 @@
         source_image: "{{ source_image }}"
         zone: "{{ zone }}"
         project: "{{ project }}"
-        # auth_kind: serviceaccount
-        # service_account_file: "{{ service_account_file }}"
+        auth_kind: serviceaccount
+        service_account_contents: "{{ service_account_file }}"
         state: present
       register: disk
 
