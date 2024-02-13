@@ -15,14 +15,14 @@
         state: present
 
 
-        - name: Ping hosts
-          tower_host:
-            name: "{{ inventory_hostname }}"
-            credential: "gcp-samad-cred"  # Name of the machine credential defined in AWX
-          register: ping_result
-    
-        - debug:
-            var: ping_result
+    - name: Ping hosts
+      tower_host:
+        name: "{{ inventory_hostname }}"
+        credential: "gcp-samad-cred"  # Name of the machine credential defined in AWX
+      register: ping_result
+
+    - debug:
+        var: ping_result
       
     - name: Create a disk
       google.cloud.gcp_compute_disk:
