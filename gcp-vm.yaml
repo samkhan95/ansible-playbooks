@@ -10,9 +10,9 @@
         update_cache: yes
       become: yes
 
-    - name: Ensure google-auth is installed
-      pip:
-        name: google-auth
+    - name: Ensure google-auth is installed via apt
+      apt:
+        name: python3-google-auth
         state: present
       
     - name: Create a disk
