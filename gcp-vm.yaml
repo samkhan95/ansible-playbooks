@@ -16,13 +16,10 @@
 
 
     - name: Ping hosts
-      tower_host:
-        name: "{{ inventory_hostname }}"
-        credential: "gcp-samad-cred"  # Name of the machine credential defined in AWX
-      register: ping_result
+      ping:
 
     - debug:
-        var: ping_result
+        var: ansible_play_hosts_all
       
     - name: Create a disk
       google.cloud.gcp_compute_disk:
