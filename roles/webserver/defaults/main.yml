@@ -1,4 +1,4 @@
 ---
 # defaults file for webserver
-nginx_version: 1.18.0-0ubuntu1.4
+nginx_version: nginx/1.22.1
 nginx_custom_directory: /var/www/example_domain
