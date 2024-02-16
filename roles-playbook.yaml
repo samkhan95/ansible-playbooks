@@ -1,0 +1,70 @@
+- hosts: all
+  become: true
+  roles:
+    - webserver
+# When using the roles option at the play level, we can override any of the default role’s variables or pass other keywords, like tags.
+# Tags are added to all tasks within the role.
+
+# - hosts: all
+#  become: true
+#  roles:
+#    - role: webserver
+#      vars:
+#        nginx_version: 1.17.10-0ubuntu1
+#      tags: example_tag
+
+# Apart from defining roles at the play level with the roles option,
+# we can use them also at the tasks level with the options include_role dynamically and import_role statically.
+# These are useful when we would like to run our role tasks in a specific order and not necessarily before any other playbook tasks.
+# This way, roles run in the order they are defined in plays.
+
+# - hosts: all
+#   tasks:
+#     - name: Print a message
+#       ansible.builtin.debug:
+#         msg: "This task runs first and before the example role"
+
+#     - name: Include the example role and run its tasks
+#       include_role:
+#         name: example
+
+#     - name: Print a message
+#       ansible.builtin.debug:
+#         msg: "This task runs after the example role"
+
+#     - name: Include the example_2 role and run its tasks in the end
+#       include_role:
+#         name: example_2
+
+# Even if we define a role multiple times, Ansible will execute it only once.
+# Occasionally, we might want to run a role multiple times but with different parameters.
+# Passing a different set of parameters to the same roles allows executing the role more than once.
+
+# Example of executing the role test three times:
+
+# - hosts: all
+#   roles:
+#     - role: test
+#       message: "First time"
+#     - role: test
+#       message: "Second time"
+#     - role: test
+#       message: "Third time"
+
+# You can use Ansible Galaxy to browse for roles that fit your use case and save time by using them instead of writing everything from scratch.
+# For each role, you can see its code repository, documentation, and even a rating from other users.
+# Before running any role, check its code repository to ensure it’s safe and does what you expect.
+
+# To download and install a role from Galaxy, use the ansible-galaxy install command.
+# ansible-galaxy install geerlingguy.postgresql
+
+# Then use it in a playbook while overriding the default role variable postgresql_users to create an example user for us.
+
+# ---
+- hosts: all
+  become: true
+  roles:
+    - role: geerlingguy.postgresql
+      vars:
+        postgresql_users:
+          - name: christina
