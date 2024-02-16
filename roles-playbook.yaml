@@ -61,10 +61,10 @@
 # Then use it in a playbook while overriding the default role variable postgresql_users to create an example user for us.
 
 # ---
-- hosts: all
-  become: true
-  roles:
-    - role: geerlingguy.postgresql
-      vars:
-        postgresql_users:
-          - name: christina
+# - hosts: all
+#   become: true
+#   roles:
+#     - role: geerlingguy.postgresql
+#       vars:
+#         postgresql_users:
+#           - name: christina
